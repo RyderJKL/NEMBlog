@@ -3,14 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>NEMBlog</title>
+    <link rel="stylesheet" href="/stylesheets/layout.css">
 </head>
 <body>
-    <header>
-        <h1><%= title%></h1>
-    </header>
+<header>
+    <h1><%= title %></h1>
+    <div class="nav">
+        <ul class="nav-tabs">
+            <li><a href="/" title="主页">Home</a></li>
+            <% if (!user) { %>
+            <li><a href="/login" title="登录">Login</a></li>
+            <li><a href="/reg" title="注册">Register</a></li>
+            <% } else { %>
+            <li><a href="/post" title="发表">发表</a></li>
+            <li><a href="/logout" title="登出">登出</a></li>
+            <%}%>
+        </ul>
+    </div>
+</header>
 
-    <nav>
-        <span><a href="/" title="主页">Home</a></span>
-        <span><a href="/login" title="登录">Login</a></span>
-        <span><a href="/reg" title="注册">Register</a></span>
-    </nav>
+<article>
+
+</article>
+
+
