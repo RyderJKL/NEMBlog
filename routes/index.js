@@ -2,9 +2,11 @@ var express = require('express');
 var router = express.Router();
 let crypto = require('crypto');
 // 引入 crypto 模块，生成散列值用以加密
-
+let fs = require('fs');
 User = require('../models/user.js');
-
+// 引入 user 对象，以管理用户信息，是一个描述数据的对象，对应 MVC 架构中的 M
+Post = require('../models/post.js');
+// 引入 post 模块，为发表文章注册响应
 
 // 路由规划:
 // /: 首页
@@ -15,34 +17,61 @@ User = require('../models/user.js');
 
 // 其中 '/login' 和 '/reg' 只能是未登录的用户访问，而 '/post' 和 '/logout' 只能是已登录的用户访问
 
+// 页面权限控制，通过 checkLogin 和 checkNotLogin
+// 函数对用户状态进行检查，以显示不同的导航信息
+function checkLogin(req, res, next) {
+	if (!req.session.user) {
+		console.log("未登录");
+		res.redirect('/login');
+	}
+
+	next();
+}
+
+function checkNotLogin(req, res, next) {
+	if (req.session.user) {
+		console.log("已登录！");
+		res.redirect('back');
+		//	返回上一个页面
+	}
+	next();
+}
 
 /* GET home page. */
 
 
-router.get('/', function(req, res) {
-	// console.log(req.session.user);
-	res.render('index', {
-		title: '主页',
+router.get('/', function (req, res) {
+	Post.getAll(null, function (err, posts) {
+		// 获取一个人的所有文章(传入 name)或获取所有人的文章(不传入参数)
+		if (err) {
+			posts = [];
+		}
+		res.render('index', {
+			title: '主页',
+			user: req.session.user,
+			posts: posts,
+			// success: req.flash('success').toString(),
+			// error: req.flash('error').toString()
+		})
+	})
+});
+
+router.get('/reg', checkNotLogin)
+router.get('/reg', function (req, res) {
+	res.render('reg', {
+		title: '注册',
 		user: req.session.user,
 		// success: req.flash('success').toString(),
-		// error: req.flash('error').toString()
+		// error: req.flash('error').toString
 	});
 });
 
-router.get('/reg', function (req, res) {
-    res.render('reg', {
-    	title: '注册',
-        user: req.session.user,
-	    // success: req.flash('success').toString(),
-	    // error: req.flash('error').toString
-    });
-});
-
+router.post('/reg', checkNotLogin)
 router.post('/reg', function (req, res) {
-	let	password = req.body.password,
+	let password = req.body.password,
 		password_re = req.body['password-repeat'];
 //	检验两次密码是否一致
-	if (password_re != password){
+	if (password_re != password) {
 		return res.redirect('/reg');
 	}
 
@@ -58,74 +87,166 @@ router.post('/reg', function (req, res) {
 
 //	检查用户是否已存在
 	User.get(newUser.name, function (err, user) {
-		console.log('User.get: ' + user);
-		if (user){
+		if (user) {
 			console.log('用户已经存在');
 			return res.redirect('/reg');
 		}
 
-	//	 不存在则创建新用户
+		//	 不存在则创建新用户
 		newUser.save(function (err, user) {
-			if (err){
+			// save 是一个回调函数
+			if (err) {
 				// req.flash('error', err);
 				return res.redirect('/reg');
 			}
-			console.log('newUser: ' + user);
+			console.log('正在注册用户:' + user.name);
 			req.session.user = user;
-		//	写入用户 session
-		// 	req.flash('success', '注册成功！');
+			console.log(req.session.user.name)
+			//	写入用户 session
+			console.log('注册成功！');
 			res.redirect('/');
 		})
 	})
 });
 
+router.get('/login', checkNotLogin)
 router.get('/login', function (req, res) {
-    res.render('login', {
-    	title: '登录',
-        user: req.session.user,
-    });
+	res.render('login', {
+		title: '登录',
+		user: req.session.user,
+	});
 })
 
-
+router.post('/login', checkNotLogin)
 router.post('/login', function (req, res) {
 	//	生成 MD5 密码值
 	let md5 = crypto.createHash("md5"),
 		password = md5.update(req.body.password).digest('hex');
 //	检查用户是否存在
-	User.get(req.body.name, function (err, user){
-			if (!user){
+	User.get(req.body.name, function (err, user) {
+			if (!user) {
 				console.log("用户不存在");
 				return res.redirect('/login');
 			}
 
 			//	密码是否一致
-			if( user.password != password){
+			if (user.password != password) {
 				console.log("密码不正确!");
 				return res.redirect('/login');
 			}
 
 			//	否则，登录成功
-			req.session.user = user;
 			console.log("登录成功!");
+			req.session.user = user;
 			res.redirect('/');
+
 		}
 	)
+	console.log("dfsafda")
 });
 
+router.get('/post', checkLogin)
 router.get('/post', function (req, res) {
-    res.render('post', {title: '发表'});
+	console.log('发布文章页面:' + req.session.user)
+	res.render('post', {
+		title: '发表',
+		user: req.session.user,
+	});
 });
 
+router.post('/post', checkLogin)
 router.post('/post', function (req, res) {
-
+	let currentUser = req.session.user;
+	console.log("正在发布文章，作者是:" + currentUser.name);
+	let post = new Post(currentUser.name, req.body.title, req.body.post);
+	post.save(function (err) {
+		if (err) {
+			console.log(err);
+			return res.redirect('/');
+		}
+		console.log("发布成功");
+		res.redirect('/');
+	})
 });
 
+router.get('/logout', checkLogin)
 router.get('/logout', function (req, res) {
 	req.session.user = null;
 	console.log("退出成功");
 	res.redirect('/');
 });
 
+
+router.get('/upload', checkLogin);
+// 设置权限，只有登录用户才能上传
+router.get('/upload', function (req, res) {
+	res.render('upload', {
+		title: '文件上传',
+		user: req.session.user,
+	})
+})
+
+router.post('/upload', function (req, res) {
+	for (let i in req.files) {
+		if (req.files[i].size == 0) {
+			//	使用同步方式删除一个文件
+			fs.unlinkSync(req.files[i].path);
+			console.log('Successfully removed an empty file!');
+		} else {
+			let target_path = './public/images/' + req.files[i].name;
+			//	使用同步方法重命名一个文件
+			fs.renameSync(req.files[i].path, target_path);
+			console.log('Successfully renamed a file');
+		}
+	}
+
+	res.redirect("/upload");
+})
+
+// 添加用户页面和文章页面
+// 用户页面: 当单击某个用户名链接时，跳转到:
+// domain/u/username,并列出该用户的所有文章
+// 文章页面: 单击某篇文章标题，跳转:
+// domain/u/username/time/post.title
+
+router.get('/u/:name', function (req, res) {
+	// 根据用户名，发布日期及文章标题获取一篇文章
+	User.get(req.params.name, function (err, user) {
+		if (!user) {
+			console.log("用户名不存在")
+			return res.redirect('/')
+		}
+
+		Post.getAll(user.name, function (err, posts) {
+			//	查询并返回用户的所有文章
+			if (err) {
+				console.log("err")
+				return redirect('/')
+			}
+
+			res.render('user', {
+				title: req.title,
+				posts: posts,
+				user: req.session.user,
+			})
+		})
+	})
+})
+
+router.get('/u/:name/:day/:title', function (req, res) {
+	Post.getOne(req.params.name, req.params.day, req.params.title, function (err, post) {
+		if (err) {
+			console.log('err');
+			return res.redirect('/')
+		}
+
+		res.render('article', {
+			title: req.params.title,
+			post: post,
+			user: req.session.user
+		})
+	})
+})
 
 
 module.exports = router;

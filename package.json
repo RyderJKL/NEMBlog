@@ -16,6 +16,7 @@
     "mongodb": "*",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.0",
-    "connect-flash": "*"
+    "markdown":"*",
+    "connect-multiparty":"~1.0.5"
   }
 }

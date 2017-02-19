@@ -37,12 +37,12 @@ User.prototype.save = function (callback) {
 		//	将用户信息插入集合
 			collection.insert(user, {
 				safe: true
-			}, function (err, user) {
+			}, function (err) {
 				mongodb.close();
 				if (err){
 					return callback(err);
 				}
-				callback(null, user);
+				callback(null,user);
 			//	插入成功，并返回存储后的用户文档
 			})
 		})
