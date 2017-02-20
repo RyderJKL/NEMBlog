@@ -10,6 +10,7 @@ function  Post(name, title, post) {
 	this.name = name;
 	this.title = title;
 	this.post = post;
+
 }
 
 // 存储一篇文章及其相关信息
@@ -17,7 +18,7 @@ Post.prototype.save = function (callback) {
 	let date = new Date();
 //	存储各种时间格式，方便以后扩展
 	let time = {
-		data: date,
+		date: date,
 		year: date.getFullYear(),
 		month: date.getFullYear() + '-' + (date.getMonth() + 1),
 		day: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(),
@@ -29,7 +30,9 @@ Post.prototype.save = function (callback) {
 		name: this.name,
 		time: time,
 		title: this.title,
-		post: this.post
+		post: this.post,
+		comments: []
+		// 保存留言
 	};
 
 //	打开数据库
@@ -118,13 +121,22 @@ Post.getOne = function (name, day, title, callback) {
 				}, function (err, doc) {
 					mongodb.close()
 					if (err){
+
 						return callback(err)
 					}
 
 				//	解析markdown为html
-					doc.post = markdown.toHTML(doc.post);
+					if(doc){
+						doc.post = markdown.toHTML(doc.post);
+						// 返回查询的文章
+						doc.comments.forEach(function (comment) {
+							// 返回对应的留言
+							comment.content = markdown.toHTML(comment.content)
+						})
+					}
+
 					callback(null, doc);
-					// 返回查询的文章
+
 				})
 			}
 		)
@@ -215,7 +227,9 @@ Post.remove = function (name, day, title, callback) {
 			})
 		})
 	})
-}
+};
+
+
 
 module.exports = Post;
 

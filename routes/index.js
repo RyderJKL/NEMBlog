@@ -8,6 +8,10 @@ User = require('../models/user.js');
 Post = require('../models/post.js');
 // 引入 post 模块，为发表文章注册响应
 
+Comment = require('../models/comment.js');
+// 引入 留言模块
+
+
 // 路由规划:
 // /: 首页
 // /login: 用户登录
@@ -234,17 +238,44 @@ router.get('/u/:name', function (req, res) {
 })
 
 router.get('/u/:name/:day/:title', function (req, res) {
+	console.log("已经跳转页面!!!")
 	Post.getOne(req.params.name, req.params.day, req.params.title, function (err, post) {
 		if (err) {
 			console.log('err');
 			return res.redirect('/')
 		}
-
+		console.log("数据获取成功")
 		res.render('article', {
 			title: req.params.title,
 			post: post,
 			user: req.session.user
 		})
+	})
+})
+
+router.post('/u/:name/:day/:title', function (req, res) {
+	let date = new Date();
+	let time = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+		+ " " + date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
+
+	let comment = {
+		name: req.body.name,
+		email: req.body.email,
+		website: req.body.website,
+		time: time,
+		content: req.body.content
+	};
+
+	let newComment = new Comment(req.params.name, req.params.day, req.params.title, comment);
+
+	newComment.save(function (err) {
+		if (err){
+			console.log("留言保存失败!");
+			return res.redirect('back');
+		}
+
+		console.log("留言成功!");
+		res.redirect('back');
 	})
 })
 
@@ -298,6 +329,8 @@ router.get('/remove/:name/:day/:title', function (req, res) {
 		console.log('删除文章车成功！');
 		res.redirect('/');
 	})
-})
+});
+
+
 
 module.exports = router;

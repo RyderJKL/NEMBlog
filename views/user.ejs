@@ -1,18 +1,28 @@
 <%- include header %>
-<section class="section-user">
-    <% posts.forEach(function (post, index){ %>
-    <p><h2>
-        <a href="/u/<%= post.name %>/<%= post.time
-                .day %>/<%= post.title %>"><%=
-                post.title%></a>
-    </h2></p>
-    <p class="info">
+<% posts.forEach(function (post, index){ %>
+<div class="well">
+
+    <div class="navbar-left">
+        <p class="navbar-header">
+            <a href="/u/<%= post.name %>/<%= post.time
+                    .day %>/<%= post.title %>"><%=
+                    post.title %></a>
+        </p>
+    </div>
+
+    <div class="navbar-text">
+        <p><%- post.post %></p>
+    </div>
+
+    <div class="navbar-link">
         作者： <a href="/u/<%= post.name %>"><%=
                 post.name
             %></a>
         日期: <%= post.time.minute %>
-    </p>
-    <p><%- post.post %></p>
-    <% }) %>
-</section>
+
+    </div>
+</div>
+
+
+<% }) %>
 <%- include footer %>

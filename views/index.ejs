@@ -1,19 +1,23 @@
 <%- include header %>
-<section class="section-index">
-    <articel>
-        <% posts.forEach(function (post, index) { %>
-        <p><h2><a href="/u/<%= post.name%>/<%=
-                post.time.day%>/<%= post.title%>"><%= post
-                        .title%></a></h2></p>
-        <p class="info">
-            作者:
-            <a href="/u/<%= post.name %>"><%= post.name %></a>
-            日期: <%= post.time.minute %>
-        </p>
-        <p><%- post.post %></p>
-        <% }) %>
-    </articel>
-</section>
+        <div class="panel panel-info">
+            <% posts.forEach(function (post, index) { %>
+            <p class="panel-heading"><a
+                        href="/u/<%= post
+                                .name%>/<%=
+                            post.time.day%>/<%= post.title%>"><%= post
+                            .title%></a></p>
+            <p class="panel-body"><%- post.post %></p>
+            <p class="panel-footer">
+                作者:
+                <a href="/u/<%= post.name %>"><%= post.name %></a>
+                日期: <%= post.time.minute %>
+            </p>
+
+            <% }) %>
+        </div>
+
+
+</div>
 
 
 <%- include footer %>

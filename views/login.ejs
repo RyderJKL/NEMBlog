@@ -1,11 +1,32 @@
 <%- include header %>
-<section class="section-login">
-    <form method="post">
-        <label for="">User:</label>
-        <input type="text" name="name" id="userName">
+
+
+<form method="post">
+
+
+    <div class="form-group">
+        <label
+                for="">User:</label>
+            <input type="text" name="name"
+                   class="form-control"
+                   id="userName">
+    </div>
+
+    <div class="form-group">
         <label for="">Password:</label>
-        <input type="text" name="password" id="password">
-        <input type="submit" value="Login">
-    </form>
-</section>
+            <input type="text"
+                   class="form-control"
+                   name="password"
+                   id="password">
+    </div>
+
+    <div class="form-group">
+        <input type="submit"
+               class="btn btn-primary  btn-block"
+               value="Login">
+    </div>
+
+</form>
+
+
 <%- include footer %>

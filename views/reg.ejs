@@ -1,15 +1,36 @@
 <%- include header %>
-<section class="section-registor">
+
     <form method="post">
-        用户名:
-        <input type="text" name="name">
-        密码:
-        <input type="text" name="password">
-        确认密码:
-        <input type="text" name="password-repeat">
-        邮箱:
-        <input type="email" name="email">
-        <input type="submit" value="Submit">
+        <div class="form-group">
+            <label>用户名:</label> <input
+                    class="form-control"
+                    type="text" name="name">
+        </div>
+
+        <div class="form-group">
+            <label for=""> 密码:</label>
+            <input type="text" class="form-control"
+                   name="password">
+        </div>
+
+        <div class="form-group">
+            <label for="">确认密码:</label>
+            <input type="text"
+                   class="form-control" name="password-repeat">
+        </div>
+
+        <div class="form-group">
+            <label for=""> 邮箱:</label>
+            <input type="email" class="form-control"
+                   name="email">
+        </div>
+
+       <div class="form-group">
+           <input type="submit" class="btn
+           btn-block btn-info"
+                  value="Submit">
+       </div>
+
+
     </form>
-</section>
 <%- include footer %>
