@@ -2,29 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>NEMBlog</title>
-    <link rel="stylesheet" href="/stylesheets/layout.css">
+
+    <script src="javascripts/jquery-1
+    .11.1
+    .min.js"></script>
+    <script src="javascripts/bootstrap.min
+    .js"></script>
+
+    <link rel="stylesheet"
+          href="stylesheets/bootstrap.min.css">
+    <!--<link rel="stylesheet"-->
+    <!--href="stylesheets/bootstrap-theme.min-->
+    <!--.css">-->
+
 </head>
 <body>
-<header>
-    <h1><%= title %></h1>
-    <div class="nav">
-        <ul class="nav-tabs">
-            <li><a href="/" title="主页">Home</a></li>
-            <% if (!user) { %>
-            <li><a href="/login" title="登录">Login</a></li>
-            <li><a href="/reg" title="注册">Register</a></li>
-            <% } else { %>
-            <li><a href="/post" title="发表">发表</a></li>
-            <li><a href="/upload" title="上传">上传</a></li>
-            <li><a href="/logout" title="登出">登出</a></li>
-            <%}%>
-        </ul>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12
+    col-lg-12">
+            <h1 class="text-center"><%= title
+                %></h1>
+        </div>
     </div>
-</header>
 
-<article>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12
+        col-md-12 text-center">
+            <ul class="nav nav-pills">
 
-</article>
+
+                <li role="presentation"><a
+                            href="/"
+                            title="主页">Home</a>
+                </li>
+                <% if (!user) { %>
+                <li role="presentation"><a
+                            href="/login"
+                            title="登录">Login</a>
+                </li>
+                <li role="presentation"><a
+                            href="/reg"
+                            title="注册">Register</a>
+                </li>
+                <% } else { %>
+                <li role="presentation"><a
+                            href="/post"
+                            title="发表">发表</a></li>
+                <li role="presentation"><a
+                            href="/upload"
+                            title="上传">上传</a></li>
+                <li role="presentation"><a
+                            href="/logout"
+                            title="登出">登出</a></li>
+                <% } %>
+
+            </ul>
+        </div>
+    </div>
+
+
+
+
 
 

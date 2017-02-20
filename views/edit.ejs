@@ -1,0 +1,12 @@
+<%- include header%>
+<form action="" method="post">
+    标题: <br>
+    <input type="text" name="title" value="<%=
+    post.title
+ %>" disabled>
+    正文: <br>
+    <textarea name="post" id="" cols="100"
+              rows="20"><%= post.post%></textarea>
+    <input type="submit" value="Save">
+</form>
+<%- include footer%>

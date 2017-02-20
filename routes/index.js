@@ -249,4 +249,55 @@ router.get('/u/:name/:day/:title', function (req, res) {
 })
 
 
+router.get('/edit/:name/:day/:title', checkLogin)
+router.get('/edit/:name/:day/:title', function (req, res) {
+	let currentUser = req.session.user;
+	Post.edit(currentUser.name, req.params.day, req.params.title, function (err, post) {
+		if(err){
+			console.log("编辑文章时发生错误!")
+			return res.redirect('back')
+		}
+
+		res.render('edit', {
+			title: '编辑',
+			post: post,
+			user: req.session.user,
+			success: '正在跳转到编辑页面',
+			error: '跳转到编辑页面时发生错误'
+		})
+
+	})
+});
+
+router.post('/edit/:name/:day/:title', checkLogin);
+router.post('/edit/:name/:day/:title', function (req, res) {
+	let currentUser = req.session.user;
+	Post.update(currentUser.name, req.params.day, req.params.title, req.body.post, function (err) {
+		let url = '/u/' + req.params.name + '/' + req.params.day + '/' + req.params.title;
+
+		if(err){
+			console.log("更新文章时出错!")
+			return res.redirect(url)
+			// 返回文章页
+		}
+
+		console.log("修改成功")
+		res.redirect(url);
+	})
+});
+
+router.get('/remove/:name/:day/:title', checkLogin);
+router.get('/remove/:name/:day/:title', function (req, res) {
+	let currentUser = req.session.user;
+	Post.remove(currentUser.name, req.params.day, req.params.title, function (err) {
+		if(err){
+			console.log("删除文章时出错了！");
+			return res.redirect('back')
+		}
+
+		console.log('删除文章车成功！');
+		res.redirect('/');
+	})
+})
+
 module.exports = router;

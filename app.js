@@ -48,7 +48,7 @@ app.use(session({
 }));
 
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
 // 将静态资源存在到 public 目录下
 
 app.use('/', index);
