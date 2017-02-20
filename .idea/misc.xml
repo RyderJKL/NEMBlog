@@ -9,6 +9,9 @@
     <annotation-enable>false</annotation-enable>
     <other-services-enabled>false</other-services-enabled>
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/REAMD.md" />
+  </component>
   <component name="masterDetails">
     <states>
       <state key="ScopeChooserConfigurable.UI">
