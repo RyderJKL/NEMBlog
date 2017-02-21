@@ -121,14 +121,26 @@ Post.getOne = function (name, day, title, callback) {
 					'time.day': day,
 					'title': title
 				}, function (err, doc) {
-					mongodb.close()
 					if (err){
-
+						mongodb.close()
 						return callback(err)
 					}
 
 				//	解析markdown为html
 					if(doc){
+						// 每访问一次，pv 值增加 1
+						collection.update({
+							"name":name,
+							"time.day":day,
+							"title":title
+						}, {
+							$inc: {"pv":1}
+						}, function (err) {
+							mongodb.close()
+							if(err){
+								return callback(err)
+							}
+						})
 						doc.post = markdown.toHTML(doc.post);
 						// 返回查询的文章
 						doc.comments.forEach(function (comment) {
@@ -361,6 +373,9 @@ Post.getTag = function (tag, callback) {
 			})
 		})
 	})
-}
+};
+
+
 module.exports = Post;
+
 

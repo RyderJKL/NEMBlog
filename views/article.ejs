@@ -16,6 +16,9 @@
 
             <div class="navbar-text">
                 <p><%- post.post%></p>
+                <p
+                        class="page-header">本文阅读量:<%=
+                    post.pv%> | 评论:<%= post.comments.length%></p>
             </div>
 
             <div class="navbar-brand">
