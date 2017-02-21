@@ -1,0 +1,23 @@
+<br>
+<div class="row">
+    <nav aria-label="Page navigation" class="text-center">
+        <ul class="pagination">
+            <% if (!isFirstPage) {%>
+            <li>
+                <a href="?p=<%=page -1%>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <%}%>
+            <% if(!isLastPage){%>
+            <li>
+                <a href="?p=<%=page+1%>"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <%}%>
+        </ul>
+</div>
+
+</nav>

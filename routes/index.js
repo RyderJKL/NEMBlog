@@ -45,19 +45,36 @@ function checkNotLogin(req, res, next) {
 
 
 router.get('/', function (req, res) {
-	Post.getAll(null, function (err, posts) {
-		// 获取一个人的所有文章(传入 name)或获取所有人的文章(不传入参数)
-		if (err) {
-			posts = [];
+	let page = req.query.p ? parseInt(req.query.p) : 1;
+	// 判断是否是第一页，并把请求的页数转换为 number 类型
+	Post.getTen(null, page, function (err, posts, total) {
+		// 查询并返回第 page 也的 10 篇文章
+		if (err){
+			posts =[];
 		}
-		res.render('index', {
+
+		res.render('index',{
 			title: '主页',
-			user: req.session.user,
 			posts: posts,
-			// success: req.flash('success').toString(),
-			// error: req.flash('error').toString()
+			page: page,
+			isFirstPage: (page -1 ) == 0,
+			isLastPage: ((page - 1) * 3 + posts.length) == total,
+			user: req.session.user,
 		})
 	})
+	// Post.getAll(null, function (err, posts) {
+	// 	// 获取一个人的所有文章(传入 name)或获取所有人的文章(不传入参数)
+	// 	if (err) {
+	// 		posts = [];
+	// 	}
+	// 	res.render('index', {
+	// 		title: '主页',
+	// 		user: req.session.user,
+	// 		posts: posts,
+	// 		// success: req.flash('success').toString(),
+	// 		// error: req.flash('error').toString()
+	// 	})
+	// })
 });
 
 router.get('/reg', checkNotLogin)
@@ -214,27 +231,50 @@ router.post('/upload', function (req, res) {
 // domain/u/username/time/post.title
 
 router.get('/u/:name', function (req, res) {
-	// 根据用户名，发布日期及文章标题获取一篇文章
+	let page = req.query.p ? parseInt(req.query.p) : 1;
 	User.get(req.params.name, function (err, user) {
-		if (!user) {
-			console.log("用户名不存在")
+		if(!user){
+			console.log("用户不存在")
 			return res.redirect('/')
 		}
 
-		Post.getAll(user.name, function (err, posts) {
-			//	查询并返回用户的所有文章
-			if (err) {
+		Post.getTen(user.name, page, function (err, posts, total) {
+			if(err){
 				console.log("err")
-				return redirect('/')
+				return res.redirect('/')
 			}
 
-			res.render('user', {
-				title: req.title,
+			res.render('user',{
+				title: user.name,
 				posts: posts,
-				user: req.session.user,
+				page: page,
+				isFirstPage: (page -1 ) === 0,
+				isLastPage: ((page -1 ) * 3 + posts.length) === total,
+				user: req.session.user
 			})
 		})
 	})
+	// // 根据用户名，发布日期及文章标题获取一篇文章
+	// User.get(req.params.name, function (err, user) {
+	// 	if (!user) {
+	// 		console.log("用户名不存在")
+	// 		return res.redirect('/')
+	// 	}
+	//
+	// 	Post.getAll(user.name, function (err, posts) {
+	// 		//	查询并返回用户的所有文章
+	// 		if (err) {
+	// 			console.log("err")
+	// 			return redirect('/')
+	// 		}
+	//
+	// 		res.render('user', {
+	// 			title: req.title,
+	// 			posts: posts,
+	// 			user: req.session.user,
+	// 		})
+	// 	})
+	// })
 })
 
 router.get('/u/:name/:day/:title', function (req, res) {
@@ -330,6 +370,21 @@ router.get('/remove/:name/:day/:title', function (req, res) {
 		res.redirect('/');
 	})
 });
+
+router.get('/archive', function (req, res) {
+	Post.getArchive(function (err, posts) {
+		if (err){
+			console.log("存档页面发生错误");
+			return res.redirect('/');
+		}
+
+		res.render('myarchive',{
+			title:'存档',
+			posts:posts,
+			user:req.session.user,
+		})
+	})
+})
 
 
 

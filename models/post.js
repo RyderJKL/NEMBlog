@@ -229,7 +229,77 @@ Post.remove = function (name, day, title, callback) {
 	})
 };
 
+Post.getTen = function (name, page, callback) {
+//	一次获取获取十篇文章
+	mongodb.open(function (err, db) {
+		if (err){
+			return callback(err)
+		}
 
+		db.collection('posts', function (err, collection) {
+			if (err){
+				mongodb.close()
+				return callback(err)
+			}
+
+			let query = {};
+			if(name) {
+				query.name = name;
+			}
+			collection.count(query, function (err, total) {
+			//	使用 count 返回特定查询的文档数
+				collection.find(query, {
+					skip: (page -1) * 3,
+					limit: 3
+				}).sort({
+					time: -1
+				}).toArray(function (err, docs) {
+					mongodb.close()
+					if(err){
+						return callback(err)
+					}
+
+					docs.forEach((function (doc) {
+						doc.post = markdown.toHTML(doc.post);
+					}));
+					callback(null, docs, total);
+				})
+			})
+		})
+	})
+};
+
+Post.getArchive = function (callback) {
+	// 返回所有文章存档信息
+	mongodb.open(function (err, db) {
+		if(err){
+			return callback(err);
+		}
+		db.collection('posts', function (err, collection) {
+			if(err){
+				mongodb.close()
+				return callback(err)
+			}
+
+			collection.find({},{
+				// 返回只包含 name，time，title
+				// 属性的文档组成的存档数组
+				"name":1,
+				"time":1,
+				"title":1
+			}).sort({
+				time: -1
+			}).toArray(function (err, docs) {
+				mongodb.close();
+				if(err){
+					return callback(err);
+				}
+
+				callback(null, docs);
+			})
+		})
+	})
+};
 
 module.exports = Post;
 

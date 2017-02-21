@@ -20,6 +20,17 @@
     href="/stylesheets/bootstrap-theme.min
     .css">
 
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            text-decoration: none;
+            list-style: none;
+        }
+        html,body{
+            width:100%;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -32,34 +43,36 @@
     </div>
 
     <div class="row">
+            <div class="well">
+                <ul class="nav nav-pills">
 
-            <ul class="nav nav-tabs center-block">
+                    <li role="presentation"><a
+                                href="/"
+                                title="主页">Home</a>
+                    </li>
+                    <% if (!user) { %>
+                    <li role="presentation"><a
+                                href="/login"
+                                title="登录">Login</a>
+                    </li>
+                    <li role="presentation"><a
+                                href="/reg"
+                                title="注册">Register</a>
+                    </li>
+                    <% } else { %>
+                    <li role="presentation"><a
+                                href="/post"
+                                title="发表">发表</a></li>
+                    <li role="presentation"><a
+                                href="/upload"
+                                title="上传">上传</a></li>
+                    <li role="presentation"><a
+                                href="/logout"
+                                title="登出">登出</a></li >
+                    <% } %>
+                </ul>
 
-                <li role="presentation"><a
-                            href="/"
-                            title="主页">Home</a>
-                </li>
-                <% if (!user) { %>
-                <li role="presentation"><a
-                            href="/login"
-                            title="登录">Login</a>
-                </li>
-                <li role="presentation"><a
-                            href="/reg"
-                            title="注册">Register</a>
-                </li>
-                <% } else { %>
-                <li role="presentation"><a
-                            href="/post"
-                            title="发表">发表</a></li>
-                <li role="presentation"><a
-                            href="/upload"
-                            title="上传">上传</a></li>
-                <li role="presentation"><a
-                            href="/logout"
-                            title="登出">登出</a></li>
-                <% } %>
-            </ul>
+            </div>
 
     </div>
 
