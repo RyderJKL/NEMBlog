@@ -4,24 +4,12 @@
     <input type="text" name="title" value="<%=
     post.title
  %>" disabled>
+    标签: <br>
+    <input type="text" name="tags" value="<%=
+    post.tags%>" disabled="disabled">
     正文: <br>
     <textarea name="post" id="" cols="100"
               rows="20"><%= post.post%></textarea>
     <input type="submit" value="Save">
 </form>
-<%- include footer%>
-<% include header%>
-
-<ul class="archive">
-    <% let lastYear = 0 %>
-    <% posts.forEach(function (post, index){%>
-    <% if (lastYear != post.time.year) { %>
-    <li><h3><%=post.time.year%></h3></li>
-    <% lastYear=post.time.year}%>
-    <li><time><%=post.time.day %></time></li>
-    <li><a href="/u/<%= post.name%>/<%= post
-                .time.day%>/<%= post
-                .title%>"><%=post.title%></a></li>
-    <% })%>
-</ul>
 <%- include footer%>

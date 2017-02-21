@@ -179,7 +179,8 @@ router.post('/post', checkLogin)
 router.post('/post', function (req, res) {
 	let currentUser = req.session.user;
 	console.log("正在发布文章，作者是:" + currentUser.name);
-	let post = new Post(currentUser.name, req.body.title, req.body.post);
+	let tags = req.body.tags.split(" ");
+	let post = new Post(currentUser.name, req.body.title, tags, req.body.post);
 	post.save(function (err) {
 		if (err) {
 			console.log(err);
@@ -384,8 +385,38 @@ router.get('/archive', function (req, res) {
 			user:req.session.user,
 		})
 	})
-})
+});
 
+router.get('/tags', function (req, res) {
+	// 标签页路由，返回所有标签
+	Post.getTags(function (err, posts) {
+		if(err){
+			console.log('标签查找错误')
+			return res.redirect('/')
+		}
+
+		res.render('tags',{
+			title: '标签',
+			posts: posts,
+			user: req.session.user
+		})
+	})
+});
+
+router.get('/tags/:tag', function (req, res) {
+	Post.getTag(req.params.tag, function (err, posts) {
+		if (err){
+			console.log("获取特定标签页失败");
+			return res.redirect('/');
+		}
+
+		res.render('tag',{
+			title: 'TAG:' + req.params.tag,
+			posts: posts,
+			user: req.session.user
+		})
+	})
+})
 
 
 module.exports = router;

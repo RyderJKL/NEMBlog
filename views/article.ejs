@@ -23,6 +23,15 @@
                     post.name
                     %></a>
                 日期: <%= post.time.minute%>
+                <% post.tags.forEach(function
+                        (tag, index) { %>
+                <% if (tag) {%>
+                <a href="/tags/<%= tag%>"><span
+                            class="label
+                            label-info"><%= tag
+                        %></span></a>
+                <% }%>
+                <% })%>
             </div>
         </div>
     </div>

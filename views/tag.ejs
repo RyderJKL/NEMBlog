@@ -1,0 +1,15 @@
+<%- include header%>
+    <div class="panel">
+        <% let lastYear = 0%>
+        <% posts.forEach(function (post, index) { %>
+            <% if (lastYear != post.time.year) {%>
+            <p class="panel-heading"><%=
+                    post.time.year%></p>
+            <% lastYear = post.time.year }%>
+            <p class="panel-default"><time
+                ><%= post.time.day%></time
+                ></p>
+        <p class="panel-info"><a href="/u/<%= post.name%>/<%= post.time.day%>/<%= post.title%>"><%= post.title%></a></p>
+        <%})%>
+    </div>
+<%- include footer%>

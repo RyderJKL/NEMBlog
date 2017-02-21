@@ -6,9 +6,10 @@
 let mongodb = require('./db');
 let markdown = require('markdown').markdown;
 
-function  Post(name, title, post) {
+function  Post(name, title, tags, post) {
 	this.name = name;
 	this.title = title;
+	this.tags = tags;
 	this.post = post;
 
 }
@@ -30,6 +31,7 @@ Post.prototype.save = function (callback) {
 		name: this.name,
 		time: time,
 		title: this.title,
+		tags: this.tags,
 		post: this.post,
 		comments: []
 		// 保存留言
@@ -279,8 +281,7 @@ Post.getArchive = function (callback) {
 			if(err){
 				mongodb.close()
 				return callback(err)
-			}
-
+		}
 			collection.find({},{
 				// 返回只包含 name，time，title
 				// 属性的文档组成的存档数组
@@ -301,5 +302,65 @@ Post.getArchive = function (callback) {
 	})
 };
 
+
+Post.getTags = function (callback) {
+	// 获取所有标签页
+	mongodb.open(function (err, db) {
+		if (err){
+			return callback(err);
+		}
+
+		db.collection('posts', function (err, collection) {
+			if (err){
+				mongodb.close();
+				return callback(err);
+			}
+			collection.distinct("tags", function (err, docs) {
+				// 使用 distinct 来找出给定键的所有不同值
+				// mongodb 数据库
+				mongodb.close();
+				if (err){
+					return callback(err);
+				}
+				callback(null, docs);
+			})
+		})
+	})
+};
+
+Post.getTag = function (tag, callback) {
+	// 获取某一特定类型的标签
+	mongodb.open(function (err, db) {
+		if (err){
+			return callback(err);
+		}
+
+		db.collection('posts', function (err, collection) {
+			if (err){
+				mongodb.close()
+				return callback(err)
+			}
+
+			collection.find({
+				// 查询所有 tags 数组 内包含 tag 的文档
+				// 返回只有包含 name,time,title 组成的数组
+				"tags":tag
+			}, {
+				"name":1,
+				"time":1,
+				"title":1
+			}).sort({
+				time:-1
+			}).toArray(function (err, docs) {
+				mongodb.close();
+				if(err){
+					return callback(err)
+				}
+
+				callback(null,docs);
+			})
+		})
+	})
+}
 module.exports = Post;
 

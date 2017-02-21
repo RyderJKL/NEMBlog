@@ -1,9 +1,16 @@
 <%- include header %>
     <form method="post" class="pager">
         <div class="page-header">
-            <h3>标题:</h3>
-            <div><input type="text"
+
+            <div><label class="label-primary"
+                        for="">文章标题:</label><input
+                        type="text"
                         name="title" placeholder="请输入文章标题"></div>
+            <div><label
+                        class="label-info"
+                        for="">标签:</label><input placeholder="每个标签之间使用空格分隔"
+                                                 name="tags" type="text"></div>
+
         </div>
 
 
