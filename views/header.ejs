@@ -29,6 +29,23 @@
         }
         html,body{
             width:100%;
+            font-size:14px;
+        }
+
+        .search {
+            border:1px solid transparent;
+            width: 200px;
+            text-align: center;
+            font-size:1em;
+            margin:0.5 em 0;
+        }
+        
+        .search:hover {
+            border:1px solid hotpink;
+        }
+
+        .search > input {
+            width:100%;
         }
     </style>
 </head>
@@ -43,6 +60,7 @@
     </div>
 
     <div class="row">
+
             <div class="well">
                 <ul class="nav nav-pills">
 
@@ -76,6 +94,17 @@
                                 href="/logout"
                                 title="登出">登出</a></li >
                     <% } %>
+                </ul>
+
+                <ul>
+                    <li>
+                        <form action="/search"
+                              class="search"
+                              method="get"
+                        ><input type="text"
+                                name="keyword"
+                                placeholder="请输入要搜索的标题"
+                            ></form></li>
                 </ul>
 
             </div>

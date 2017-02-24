@@ -419,4 +419,19 @@ router.get('/tags/:tag', function (req, res) {
 })
 
 
+router.get('/search', function (req, res) {
+	Post.search(req.query.keyword, function (err, posts) {
+		if (err){
+			console.log("搜索失败");
+			return res.redirect('/');
+		}
+
+		res.render('search', {
+			title: 'Search' + req.query.keyword,
+			posts: posts,
+			user: req.session.user
+		})
+	})
+})
+
 module.exports = router;
