@@ -10,6 +10,11 @@
             <p class="panel-footer">
                 作者:
                 <a href="/u/<%= post.name %>"><%= post.name %></a>
+                <a href="/u/<%= post
+                        .name%>"><img src="<%=
+                        post.head%>"
+                                      class="r_head"
+                                      alt=""></a>
                 日期: <%= post.time.minute %>
                 <% post.tags.forEach(function
                         (tag, index) { %>

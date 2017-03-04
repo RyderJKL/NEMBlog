@@ -8,15 +8,16 @@
   "dependencies": {
     "body-parser": "~1.15.2",
     "connect-mongo": "*",
+    "connect-multiparty": "~1.0.5",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "ejs": "~2.5.2",
     "express": "~4.14.0",
     "express-session": "^1.14.2",
+    "markdown": "*",
     "mongodb": "*",
+    "mongoose": "^4.8.5",
     "morgan": "~1.7.0",
-    "serve-favicon": "~2.3.0",
-    "markdown":"*",
-    "connect-multiparty":"~1.0.5"
+    "serve-favicon": "~2.3.0"
   }
 }

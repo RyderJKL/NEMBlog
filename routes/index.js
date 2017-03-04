@@ -180,7 +180,7 @@ router.post('/post', function (req, res) {
 	let currentUser = req.session.user;
 	console.log("正在发布文章，作者是:" + currentUser.name);
 	let tags = req.body.tags.split(" ");
-	let post = new Post(currentUser.name, req.body.title, tags, req.body.post);
+	let post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.post);
 	post.save(function (err) {
 		if (err) {
 			console.log(err);

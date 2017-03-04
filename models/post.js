@@ -6,8 +6,9 @@
 let mongodb = require('./db');
 let markdown = require('markdown').markdown;
 
-function  Post(name, title, tags, post) {
+function  Post(name, head, title, tags, post) {
 	this.name = name;
+	this.head = head;
 	this.title = title;
 	this.tags = tags;
 	this.post = post;
@@ -29,11 +30,13 @@ Post.prototype.save = function (callback) {
 //	存入数据库的文档
 	let post = {
 		name: this.name,
+		head: this.head,
 		time: time,
 		title: this.title,
 		tags: this.tags,
 		post: this.post,
-		comments: []
+		comments: [],
+		pv: 0
 		// 保存留言
 	};
 
