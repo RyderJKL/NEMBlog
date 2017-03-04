@@ -4,7 +4,28 @@
 
  
 let mongodb = require('./db');
+//使用 node-mongodb-native 连接数据库
+
+// <mongoose>
+let mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost/db')
+// <mongoose/>
+
 let markdown = require('markdown').markdown;
+
+// <使用 mongoose>
+let postSchema = new  mongoose.Schema({
+	name: String,
+	head: String,
+	title: String,
+	tags: String,
+	post: String
+}, {
+	collection: 'posts'
+});
+
+let postModel = mongoose.model('Posts', postSchema);
+// <使用 mongoose/>
 
 function  Post(name, head, title, tags, post) {
 	this.name = name;
@@ -40,30 +61,38 @@ Post.prototype.save = function (callback) {
 		// 保存留言
 	};
 
-//	打开数据库
-	mongodb.open(function (err, db) {
+	let newPost = new postModel(post);
+
+	newPost.save(function (err, post) {
 		if (err){
 			return callback(err);
 		}
-
-	//	读取 posts 集合
-		db.collection('posts', function (err, collection) {
-			if ( err){
-				mongodb.close();
-				return callback(err);
-			}
-		//	将文档插入 post
-			collection.insert(post, {
-				safe: true
-			}, function (err) {
-				mongodb.close();
-				if(err){
-					return callback(err);
-				}
-				callback(null);
-			})
-		})
-	})
+		callback(null, post);
+	});
+//	打开数据库
+// 	mongodb.open(function (err, db) {
+// 		if (err){
+// 			return callback(err);
+// 		}
+//
+// 	//	读取 posts 集合
+// 		db.collection('posts', function (err, collection) {
+// 			if ( err){
+// 				mongodb.close();
+// 				return callback(err);
+// 			}
+// 		//	将文档插入 post
+// 			collection.insert(post, {
+// 				safe: true
+// 			}, function (err) {
+// 				mongodb.close();
+// 				if(err){
+// 					return callback(err);
+// 				}
+// 				callback(null);
+// 			})
+// 		})
+// 	})
 };
 
 //	读取文章及其相关信息

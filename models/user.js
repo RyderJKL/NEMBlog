@@ -3,6 +3,8 @@
  */
 let crypto = require('crypto')
 
+// let mongodb = require('./db');
+
 // 使用 Mongoose
 let mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost/db')
@@ -19,7 +21,7 @@ let userSchema = new mongoose.Schema({
 let userModel = mongoose.model('User', userSchema);
 
  
-// let mongodb = require('./db');
+
 
 function User(user) {
 	this.name = user.name;
