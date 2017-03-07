@@ -432,6 +432,37 @@ router.get('/search', function (req, res) {
 			user: req.session.user
 		})
 	})
+});
+
+router.get('/reprint/:name/:day/:title', checkLogin)
+router.get('/reprint/:name/:day/:title', function (req, res) {
+	Post.edit(req.params.name, req.params.day, req.params.title, function (err, post) {
+		if (err){
+			console.log('')
+			return res.redirect('back')
+		}
+
+		let currentUser = req.session.user;
+		let reprint_from = {
+			name: post.name,
+			day: post.time.day,
+			title: post.title
+		}
+		let reprint_to = {
+			name: currentUser.name,
+			head: currentUser.head
+		}
+
+		Post.reprint(reprint_from, reprint_to, function (err, post) {
+			if (err){
+				return res.redirect('back')
+			}
+
+			let url = '/u/' + post.name + '/' + post.time.day + '/' + post.title;
+			res.redirect(url)
+		})
+	})
 })
+
 
 module.exports = router;
