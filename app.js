@@ -5,7 +5,7 @@ var session = require('express-session');
 // session 会话管理
 var  MongoStore = require('connect-mongo')(session);
 // 数据库连接驱动
-var settings = require('./settings');
+var settings = require('./config/settings');
 // 数据库配置文件
 // var flash = require('connect-flash');
 

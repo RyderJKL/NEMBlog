@@ -2,7 +2,7 @@
  * Created by onejustone on 2017/1/18.
  */
 
-var settings = require('../settings'),
+var settings = require('../config/settings'),
 	Db = require('mongodb').Db,
 	Server = require('mongodb').Server;
 

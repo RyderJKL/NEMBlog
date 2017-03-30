@@ -6,6 +6,6 @@
 module.exports = {
 	cookieSecret: 'NEMBlog',
 	db: 'db',
-	host: 'localhost'
+	host: 'localhost：27017'
 }
  
