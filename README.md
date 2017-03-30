@@ -31,7 +31,7 @@ NEMBLog 是 OJOBlog 都多人博客管理系统的后台实现， [OJOBlog](http
 
 
 ---
-### 0x01 NEMBlog 代码架构
+### 代码架构
 
 
 ``` 
